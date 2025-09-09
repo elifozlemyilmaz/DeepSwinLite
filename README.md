@@ -13,18 +13,15 @@ The repository will include:
 
 We share refined train/val/test splits and preprocessing scripts of the Massachusetts Building Dataset.
 - Original dataset on Kaggle: [Massachusetts Buildings Dataset](https://www.kaggle.com/datasets/balraj98/massachusetts-buildings-dataset)
+- Refined dataset on Kaggle: [Refined Massachusetts Building Data](https://www.kaggle.com/datasets/yilmazelifozlem/refined-massachusetts-building-data/data)
 License: CC BY 4.0 (re-distribution allowed with attribution).
 
 ⚠️ Note: The full dataset is not redistributed here. Please download from the original source and use our scripts to generate the refined version.
 
 ## ⚙️ Codebase
 
-Planned release will include:
-- train.py, evaluate.py, infer.py
-- Model architecture (deepswinlite/model.py)
-- Configurations (configs/*.yaml)
-- Metrics & statistical testing (metrics/)
-- Pretrained weights (Zenodo/Zenodo DOI link will be provided)
+This repository provides the model architecture only:
+- deepswinlite/model.py → implementation of the DeepSwinLite network, including backbone and modules (MLFP, MSFA, AuxHead).
 
 ## 📑 Citation
 
