@@ -9,7 +9,6 @@ The repository will include:
 - Source code for model training and evaluation
 - Refined Dataset download instructions
 
-## 📁 Dataset
 
 ## 📁 Dataset
 
