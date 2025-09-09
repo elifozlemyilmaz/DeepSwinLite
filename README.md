@@ -11,12 +11,17 @@ The repository will include:
 
 ## 📁 Dataset
 
-We share refined train/val/test splits and preprocessing scripts of the Massachusetts Building Dataset.
-- Original dataset on Kaggle: [Massachusetts Buildings Dataset](https://www.kaggle.com/datasets/balraj98/massachusetts-buildings-dataset)
-- Refined dataset on Kaggle: [Refined Massachusetts Building Data](https://www.kaggle.com/datasets/yilmazelifozlem/refined-massachusetts-building-data/data)
-License: CC BY 4.0 (re-distribution allowed with attribution).
+## 📁 Dataset
 
-⚠️ Note: The full dataset is not redistributed here. Please download from the original source and use our scripts to generate the refined version.
+We provide the **refined Massachusetts Building Dataset** (including **train/validation/test splits**) as a ready-to-download package on Kaggle.
+
+- Original dataset on Kaggle: [Massachusetts Buildings Dataset](https://www.kaggle.com/datasets/balraj98/massachusetts-buildings-dataset)  
+- **Refined dataset on Kaggle (ready to download):** [Refined Massachusetts Building Data](https://www.kaggle.com/datasets/yilmazelifozlem/refined-massachusetts-building-data/data)  
+- License: **CC BY 4.0** (re-distribution allowed with attribution).
+
+⚠️ Note: This refined version includes corrected/standardized labels, removal of low-quality tiles, and curated train/val/test splits.
+
+
 
 ## ⚙️ Codebase
 
