@@ -17,50 +17,6 @@ except ImportError as e:
     ) from e
 
 
-# ------------------------- small building blocks ---------------------------- #
-
-class ConvBNAct(nn.Module):
-    def __init__(self, in_ch, out_ch, k=3, s=1, p=None, d=1, groups=1, act='relu'):
-        super().__init__()
-        if p is None:
-            p = (k // 2) * d
-        self.conv = nn.Conv2d(in_ch, out_ch, k, s, p, dilation=d, groups=groups, bias=False)
-        self.bn   = nn.BatchNorm2d(out_ch)
-        if act == 'relu':
-            self.act = nn.ReLU(inplace=True)
-        elif act == 'lrelu':
-            self.act = nn.LeakyReLU(0.01, inplace=True)
-        elif act == 'silu':
-            self.act = nn.SiLU(inplace=True)
-        elif act is None:
-            self.act = nn.Identity()
-        else:
-            raise ValueError(f"Unknown act: {act}")
-
-    def forward(self, x):
-        return self.act(self.bn(self.conv(x)))
-
-
-class SEBlock(nn.Module):
-    """Squeeze-and-Excitation block used in AuxHead."""
-    def __init__(self, ch, r=16):
-        super().__init__()
-        mid = max(8, ch // r)
-        self.avg = nn.AdaptiveAvgPool2d(1)
-        self.fc1 = nn.Conv2d(ch, mid, 1, bias=True)
-        self.fc2 = nn.Conv2d(mid, ch, 1, bias=True)
-        self.act1 = nn.SiLU(inplace=True)  # smooth non-linearity
-        self.act2 = nn.ReLU(inplace=True)  # gating as in paper
-
-    def forward(self, x):
-        s = self.avg(x)
-        s = self.fc1(s)
-        s = self.act1(s)
-        s = self.fc2(s)
-        s = self.act2(s)
-        return x * torch.sigmoid(s)
-
-
 # ---------------------------- MSFA module ----------------------------------- #
 
 class MSFA(nn.Module):
@@ -290,3 +246,4 @@ if __name__ == "__main__":
     print("logits:", y["logits"].shape)
     if "aux" in y:
         print("aux   :", y["aux"].shape)
+
