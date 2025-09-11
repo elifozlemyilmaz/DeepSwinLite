@@ -35,7 +35,7 @@ class AuxHead(nn.Module):
         self.bn2   = nn.BatchNorm2d(in_channels // 4)
         self.act2  = nn.SiLU(inplace=True)
 
-        # Squeeze-and-Excitation
+   
         mid = max(8, in_channels // 16)
         self.se = nn.Sequential(
             nn.AdaptiveAvgPool2d(1),
@@ -71,7 +71,7 @@ class MLFP(nn.Module):
                                       for _ in in_channels_list])
 
     def forward(self, feats: List[torch.Tensor]) -> torch.Tensor:
-        # feats: [C1 (hi-res), C2, C3, C4 (low-res)]
+     
         c1, c2, c3, c4 = feats
         p4 = self.lateral[3](c4)
         p3 = self.lateral[2](c3) + F.interpolate(p4, size=c3.shape[-2:], mode="nearest")
@@ -112,13 +112,13 @@ class LightDecoder(nn.Module):
 
     def __init__(self, in_ch: int = 128, mid_ch: int = 64, out_ch: int = 32, num_classes: int = 2):
         super().__init__()
-        self.up1   = nn.ConvTranspose2d(in_ch, mid_ch, kernel_size=2, stride=2)   # ~1/4 -> ~1/2
+        self.up1   = nn.ConvTranspose2d(in_ch, mid_ch, kernel_size=2, stride=2)  
         self.block = nn.Sequential(
             nn.Conv2d(mid_ch, out_ch, kernel_size=3, padding=1, bias=False),
             nn.BatchNorm2d(out_ch),
             nn.ReLU(inplace=True),
         )
-        self.up2  = nn.ConvTranspose2d(out_ch, out_ch, kernel_size=2, stride=2)   # ~1/2 -> ~1/1
+        self.up2  = nn.ConvTranspose2d(out_ch, out_ch, kernel_size=2, stride=2)   
         self.head = nn.Conv2d(out_ch, num_classes, kernel_size=1)
 
     def forward(self, x: torch.Tensor, out_hw: Tuple[int, int]) -> torch.Tensor:
@@ -145,26 +145,26 @@ class DeepSwinLite(nn.Module):
     ):
         super().__init__()
 
-        # Swin backbone (4 seviyeli özellik haritası)
+       
         self.backbone = timm.create_model(
             backbone_name,
             pretrained=backbone_pretrained,
             features_only=True,
             out_indices=(0, 1, 2, 3),
         )
-        chs = [fi["num_chs"] for fi in self.backbone.feature_info]  # örn: [96,192,384,768]
+        chs = self.backbone.num_features
 
-        # MLFP + MSFA
+
         self.mlfp = MLFP(chs, mlfp_out_channels)
         self.msfa = MSFA(mlfp_out_channels, mlfp_out_channels)
 
-        # Decoder & Aux
+
         self.decoder  = LightDecoder(in_ch=mlfp_out_channels, mid_ch=64, out_ch=32, num_classes=num_classes)
         self.aux_head = AuxHead(in_channels=mlfp_out_channels, num_classes=num_classes, dropout_rate=0.3)
 
         self.apply_softmax = apply_softmax
 
-        # init 
+
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 nn.init.kaiming_normal_(m.weight, nonlinearity="relu")
@@ -173,8 +173,8 @@ class DeepSwinLite(nn.Module):
 
         b, c, h, w = x.shape
 
-        feats = self.backbone(x)  # [c1,c2,c3,c4], BCHW
-        p = self.mlfp(feats)      # ~1/4
+        feats = self.backbone(x)  
+        p = self.mlfp(feats)    
         p = self.msfa(p)
 
         aux = self.aux_head(p, (h, w))
@@ -191,5 +191,5 @@ if __name__ == "__main__":
     model = DeepSwinLite(num_classes=2, backbone_pretrained=False, apply_softmax=False).to(device)
     x = torch.randn(1, 3, 512, 512, device=device)
     main, aux = model(x)
-    print("Main:", main.shape)  # (1, 2, 512, 512)
-    print("Aux :", aux.shape)   # (1, 2, 512, 512)
+    print("Main:", main.shape)  
+    print("Aux :", aux.shape)   
