@@ -152,7 +152,7 @@ class DeepSwinLite(nn.Module):
             features_only=True,
             out_indices=(0, 1, 2, 3),
         )
-        chs = self.backbone.num_features
+        chs = [fi["num_chs"] for fi in self.backbone.feature_info]
 
 
         self.mlfp = MLFP(chs, mlfp_out_channels)
@@ -193,3 +193,4 @@ if __name__ == "__main__":
     main, aux = model(x)
     print("Main:", main.shape)  
     print("Aux :", aux.shape)   
+
