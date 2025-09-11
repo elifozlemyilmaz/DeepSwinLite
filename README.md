@@ -32,11 +32,16 @@ This repository provides the model architecture only:
 If you use this repository or dataset refinements, please cite our paper and this repository:
 
 @article{Yilmaz2025DeepSwinLite,
-  title   = {DeepSwinLite: A Swin Transformer-Based Light Deep Learning Model for Building Extraction from VHR Imagery},
+  title   = {DeepSwinLite: A Swin Transformer-Based Light Deep Learning Model for Building Extraction Using VHR Aerial Imagery},
   author  = {Yılmaz, Elif Özlem and Kavzoğlu, Taşkın},
   journal = {Remote Sensing},
-  year    = {2025}
+  volume  = {17},
+  number  = {18},
+  pages   = {3146},
+  year    = {2025},
+  doi     = {10.3390/rs17183146}
 }
+
 
 
 ## 📬 Contact
